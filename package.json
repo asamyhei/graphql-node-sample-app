@@ -10,15 +10,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.16.4",
     "express-graphql": "^0.8.0",
     "graphql": "^14.2.1",
     "graphql-tag": "^2.10.1",
     "graphql-tools": "^4.0.4",
+    "lodash": "^4.17.11",
     "mongodb": "^3.2.3",
-    "mongoose": "^5.5.2",
-    "lodash": "^4.17.11"
+    "mongoose": "^5.5.2"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }

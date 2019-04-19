@@ -3,10 +3,11 @@ const graphqlHttp = require('express-graphql');
 const schema1 = require('./schema/schema');
 const schema2 = require('./schema/schema2');
 const mongoose = require('mongoose');
-
+const cors = require('cors');
 const app = express();
-
 const uri = "mongodb+srv://test:test123@cluster0-10jva.mongodb.net/gql-tuto?retryWrites=true";
+
+app.use(cors());
 
 mongoose.connect(uri);
 
