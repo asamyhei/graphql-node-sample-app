@@ -3,6 +3,10 @@ const {find, filter} = require('lodash');
 const {makeExecutableSchema} = require("graphql-tools");
 const Author = require('../models/author');
 const Book = require('../models/book');
+const {PubSub} = require('graphql-subscriptions');
+const pubSub = new PubSub();
+
+const AUTHOR_ADDED = 'newAuthor';
 
 const typeDefs = gql`
 
@@ -36,6 +40,10 @@ const typeDefs = gql`
         updateBook(id: ID!, name: String, genre: String, authorId: ID): Book
         deleteBook(id: ID): Book
     }
+
+    type Subscription {
+        authorAdded: Author
+    }
 `;
 
 const resolvers = {
@@ -51,7 +59,12 @@ const resolvers = {
                 name: args.name,
                 age: args.age
             });
-            return author.save();
+
+            let authorSaved = author.save();
+
+            pubSub.publish(AUTHOR_ADDED, authorSaved);
+
+            return authorSaved;
         },
         updateAuthor: (parent, args) => {
             let author = {
@@ -66,10 +79,10 @@ const resolvers = {
         },
         deleteAuthor: (parent, args) => {
 
-        return Author.findOneAndDelete({_id: args.id}, (err, docs) => {
-            Book.deleteMany({authorId: args.id}, (err, docs) => {
+            return Author.findOneAndDelete({_id: args.id}, (err, docs) => {
+                Book.deleteMany({authorId: args.id}, (err, docs) => {
+                });
             });
-        });
         },
 
         addBook: (parent, args) => {
@@ -92,6 +105,12 @@ const resolvers = {
         },
         deleteBook: (parent, args) => {
             return Book.findOneAndDelete({_id: args.id});
+        }
+
+    },
+    Subscription: {
+        authorAdded: {
+            subscribe: () => pubSub.asyncIterator(AUTHOR_ADDED)
         }
 
     },
