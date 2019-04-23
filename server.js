@@ -34,6 +34,6 @@ ws.listen(process.env.PORT || 4000, () => {
         schema: schema2
     }, {
         server: ws,
-        path: '/subscriptions',
+        path: '/graphql',
     });
 });
