@@ -62,7 +62,7 @@ const resolvers = {
 
             let authorSaved = author.save();
 
-            pubSub.publish(AUTHOR_ADDED, authorSaved);
+            pubSub.publish(AUTHOR_ADDED, {authorAdded: authorSaved});
 
             return authorSaved;
         },
